@@ -1,0 +1,15 @@
+{
+    "name": "felixdarraud/autoload",
+    "authors": [
+        {
+            "name": "Félix Darraud",
+            "email": "felix.darraud@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "CurrencyConverter\\": "src/"
+        }
+    }
+}
