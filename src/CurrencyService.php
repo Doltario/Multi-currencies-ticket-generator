@@ -78,6 +78,10 @@ class CurrencyService {
         } else {
             $currenciesRates = $this->getCurrenciesRates($outputCurrency);
         }
-        return $prix1->value * $currenciesRates[$prix1->currency] + $prix2->value * $currenciesRates[$prix2->currency];
+
+        $priceInOutputCurrency1 = $prix1->value * $currenciesRates[$prix1->currency];
+        $priceInOutputCurrency2 = $prix2->value * $currenciesRates[$prix2->currency];
+
+        return round($priceInOutputCurrency1 + $priceInOutputCurrency2, 2) . $this->getSymbol($outputCurrency);
     }
 }
