@@ -6,10 +6,11 @@ namespace CurrencyConverter;
 use CurrencyConverter\CurrencyService;
 
 class Price {
+    private $currencyService;
     private $rawValue;
     private $currency;
-    private $device;
-    
+    public $value;
+
     public function __construct($rawValue) {
         $this->currencyService = CurrencyService::init();
         $this->rawValue = $rawValue;
@@ -18,5 +19,9 @@ class Price {
 
         $this->value = $this->currencyService->substringSymbol($this->rawValue, $this->currency);
         // echo "----" . $this->currency . " " . $this->value . "----";
+    }
+
+    public function getComputedValue() {
+        return $this->value . $this->currencyService->getSymbol($this->currency);
     }
 }
