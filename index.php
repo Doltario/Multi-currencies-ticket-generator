@@ -16,6 +16,4 @@
     // var_dump($prix1);
     // var_dump($currencyService);
 
-    // $currencyService->add($prix1, $prix2);
-    // $xml = file_get_contents("https://api.exchangeratesapi.io/latest?base=USD");
-    // echo $xml;
+    echo $currencyService->add($prix1, $prix2);

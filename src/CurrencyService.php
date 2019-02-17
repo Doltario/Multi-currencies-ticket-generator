@@ -8,6 +8,7 @@ namespace CurrencyConverter;
 class CurrencyService {
     private static $_instance;
     private $outputCurrency;
+    private $currenciesRates;
     public static $currencies = [
         'EUR' => ['value' => 'EUR', 'symbol' => '€'],
         'USD' => ['value' => 'USD', 'symbol' => '$'],
@@ -27,6 +28,18 @@ class CurrencyService {
 
     public function setOutputCurrency($outputCurrency) {
         $this->outputCurrency = $outputCurrency;
+        $this->currenciesRates = $this->getCurrenciesRates($this->outputCurrency);
+    }
+
+    private function getCurrenciesRates($currency) {
+        try {
+            $data = file_get_contents("https://api.exchangeratesapi.io/latest?base=" . $currency);
+            $data = json_decode($data, true);
+            $data['rates'][$currency] = 1;
+            return $data['rates'];
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     public function determineCurrency($string) {
@@ -58,10 +71,13 @@ class CurrencyService {
         
     }
 
-    public function add($prix1, $prix2, $outputCurrency) {
-        if (!$outputCurrency) {
+    public function add($prix1, $prix2, $outputCurrency = NULL) {
+        if (is_null($outputCurrency)) {
             $outputCurrency = $this->outputCurrency;
+            $currenciesRates = $this->currenciesRates;
+        } else {
+            $currenciesRates = $this->getCurrenciesRates($outputCurrency);
         }
-
+        return $prix1->value * $currenciesRates[$prix1->currency] + $prix2->value * $currenciesRates[$prix2->currency];
     }
 }

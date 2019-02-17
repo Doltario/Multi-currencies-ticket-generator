@@ -8,7 +8,7 @@ use CurrencyConverter\CurrencyService;
 class Price {
     private $currencyService;
     private $rawValue;
-    private $currency;
+    public $currency;
     public $value;
 
     public function __construct($rawValue) {
