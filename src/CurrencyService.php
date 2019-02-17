@@ -1,9 +1,6 @@
 <?php
 
-
 namespace CurrencyConverter;
-
-
 
 class CurrencyService {
     private static $_instance;
@@ -12,7 +9,9 @@ class CurrencyService {
     public static $currencies = [
         'EUR' => ['value' => 'EUR', 'symbol' => '€'],
         'USD' => ['value' => 'USD', 'symbol' => '$'],
-        'YEN' => ['value' => 'YEN', 'symbol' => '¥']
+        'CNY' => ['value' => 'CNY', 'symbol' => '¥'],
+        'CAD' => ['value' => 'CAD', 'symbol' => '$CAD'],
+        'NOK' => ['value' => 'NOK', 'symbol' => 'Krone']
     ];
 
     private function __construct() {
@@ -79,8 +78,8 @@ class CurrencyService {
             $currenciesRates = $this->getCurrenciesRates($outputCurrency);
         }
 
-        $priceInOutputCurrency1 = $prix1->value * $currenciesRates[$prix1->currency];
-        $priceInOutputCurrency2 = $prix2->value * $currenciesRates[$prix2->currency];
+        $priceInOutputCurrency1 = $prix1->value * (1/$currenciesRates[$prix1->currency]);
+        $priceInOutputCurrency2 = $prix2->value * (1/$currenciesRates[$prix2->currency]);
 
         return round($priceInOutputCurrency1 + $priceInOutputCurrency2, 2) . $this->getSymbol($outputCurrency);
     }
