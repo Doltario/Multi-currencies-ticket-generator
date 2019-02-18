@@ -28,6 +28,6 @@
     // var_dump($prix1);
     // var_dump($currencyService);
 
-    var_dump($basket);
-
-    // customEcho($currencyService->add($prix1, $prix2));
+    // var_dump($basket);
+    $basket->printTicket();
+    // customEcho($currencyService->add($prix1, $prix2)->getComputedValue());

@@ -22,6 +22,7 @@ class Price {
     }
 
     public function getComputedValue() {
+        $currencyService = CurrencyService::init();
         return $this->value . $currencyService->getSymbol($this->currency);
     }
 }

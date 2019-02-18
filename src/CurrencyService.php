@@ -2,6 +2,8 @@
 
 namespace CurrencyConverter;
 
+use CurrencyConverter\Price;
+
 class CurrencyService {
     private static $_instance;
     private $outputCurrency;
@@ -27,6 +29,7 @@ class CurrencyService {
 
     public function setOutputCurrency($outputCurrency) {
         $this->outputCurrency = $outputCurrency;
+        $this->defaultOutputSymbol = $this->getSymbol($outputCurrency);
         $this->currenciesRates = $this->getCurrenciesRates($this->outputCurrency);
     }
 
@@ -48,8 +51,7 @@ class CurrencyService {
                 return $currency['value'];
             }
         }
-       
-        throw new \Exception('Cannot resolve currency in "' . $trimmedString . '"');
+        return $this->outputCurrency; // Or perhaps throw new \Exception('Cannot resolve currency in "' . $trimmedString . '"');
     }
 
     public function substringSymbol($string, $currency) {
@@ -62,7 +64,7 @@ class CurrencyService {
             return substr($trimmedString, 0, strpos($trimmedString, self::$currencies[$currency]['symbol']));
         }
 
-        throw new \Exception('No ' . $currency . 'symbol found in "' . $trimmedString . '"');
+        throw new \Exception('No ' . $currency . ' symbol found in "' . $trimmedString . '"');
     }
 
     public function getSymbol($currency) {
@@ -70,7 +72,7 @@ class CurrencyService {
         
     }
 
-    public function add($prix1, $prix2, $outputCurrency = NULL) {
+    public function add(Price $price1, Price $price2, $outputCurrency = NULL) {
         if (is_null($outputCurrency)) {
             $outputCurrency = $this->outputCurrency;
             $currenciesRates = $this->currenciesRates;
@@ -78,9 +80,13 @@ class CurrencyService {
             $currenciesRates = $this->getCurrenciesRates($outputCurrency);
         }
 
-        $priceInOutputCurrency1 = $prix1->value * (1/$currenciesRates[$prix1->currency]);
-        $priceInOutputCurrency2 = $prix2->value * (1/$currenciesRates[$prix2->currency]);
+        $priceInOutputCurrency1 = $price1->value * (1/$currenciesRates[$price1->currency]);
+        $priceInOutputCurrency2 = $price2->value * (1/$currenciesRates[$price2->currency]);
 
-        return round($priceInOutputCurrency1 + $priceInOutputCurrency2, 2) . $this->getSymbol($outputCurrency);
+        return new Price(round($priceInOutputCurrency1 + $priceInOutputCurrency2, 2) . $this->getSymbol($outputCurrency));
+    }
+
+    public function multiply(Price $price, $multiplier) {
+        return new Price(round($price->value*$multiplier, 2) . $this->getSymbol($price->currency));
     }
 }
