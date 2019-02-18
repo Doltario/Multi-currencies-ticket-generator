@@ -6,23 +6,22 @@ namespace CurrencyConverter;
 use CurrencyConverter\CurrencyService;
 
 class Price {
-    private $currencyService;
+    static $currencyService;
     private $rawValue;
     public $currency;
     public $value;
 
     public function __construct($rawValue) {
-        $currencyService = CurrencyService::init();
+        self::$currencyService = CurrencyService::init();
         $this->rawValue = $rawValue;
         
-        $this->currency = $currencyService->determineCurrency($this->rawValue);
+        $this->currency = self::$currencyService->determineCurrency($this->rawValue);
         
-        $this->value = $currencyService->substringSymbol($this->rawValue, $this->currency);
+        $this->value = self::$currencyService->substringSymbol($this->rawValue, $this->currency);
         // echo "----" . $this->currency . " " . $this->value . "----";
     }
 
     public function getComputedValue() {
-        $currencyService = CurrencyService::init();
-        return $this->value . $currencyService->getSymbol($this->currency);
+        return $this->value . self::$currencyService->getSymbol($this->currency);
     }
 }
