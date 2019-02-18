@@ -18,7 +18,6 @@ class Price {
         $this->currency = self::$currencyService->determineCurrency($this->rawValue);
         
         $this->value = self::$currencyService->substringSymbol($this->rawValue, $this->currency);
-        // echo "----" . $this->currency . " " . $this->value . "----";
     }
 
     public function getComputedValue() {
