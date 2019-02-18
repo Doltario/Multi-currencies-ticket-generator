@@ -12,5 +12,4 @@ class Article {
         $this->name = $name;
         $this->price = new Price($price);
     }
-
 }

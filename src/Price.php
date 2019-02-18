@@ -14,9 +14,9 @@ class Price {
     public function __construct($rawValue) {
         $currencyService = CurrencyService::init();
         $this->rawValue = $rawValue;
-
+        
         $this->currency = $currencyService->determineCurrency($this->rawValue);
-
+        
         $this->value = $currencyService->substringSymbol($this->rawValue, $this->currency);
         // echo "----" . $this->currency . " " . $this->value . "----";
     }

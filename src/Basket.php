@@ -8,6 +8,8 @@ use CurrencyConverter\CurrencyService;
 
 class Basket {
     private $articlesList = [];
+    private $ticketRow = "|%5.5s |%-30.30s | %s \n";
+    private $ticketFooter = "%38s | %s \n";
 
     public function __construct() {
     }
@@ -35,18 +37,22 @@ class Basket {
 
     public function printRow($articleToPrint, $subTotal, $lineWidth = 25) {
         $row = $articleToPrint['quantity'] . " x " . $articleToPrint['value']->name . " " . $subTotal->getComputedValue();
-        customEcho($row);
+        
+        printf($this->ticketRow, $articleToPrint['quantity'], $articleToPrint['value']->name, $subTotal->getComputedValue());
     }
 
     public function printTicket() {
         $currencyService = CurrencyService::init();
         $total = new Price("0" . $currencyService->defaultOutputSymbol);
+
+        printf($this->ticketRow, "Qte", "Nom", "Sous-total");
+
         foreach ($this->articlesList as $articleToPrint) {
             $subTotal = $this->getSubTotal($articleToPrint);
-            $this->printRow($articleToPrint, $subTotal);            
+            $this->printRow($articleToPrint, $subTotal);
             $total = $currencyService->add($total, $subTotal);
         }  
-        customEcho("-------------------------");
-        customEcho($total->getComputedValue());
+
+        printf($this->ticketFooter, "Total", $total->getComputedValue());
     }
 }
