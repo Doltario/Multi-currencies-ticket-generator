@@ -12,16 +12,16 @@ class Price {
     public $value;
 
     public function __construct($rawValue) {
-        $this->currencyService = CurrencyService::init();
+        $currencyService = CurrencyService::init();
         $this->rawValue = $rawValue;
 
-        $this->currency = $this->currencyService->determineCurrency($this->rawValue);
+        $this->currency = $currencyService->determineCurrency($this->rawValue);
 
-        $this->value = $this->currencyService->substringSymbol($this->rawValue, $this->currency);
+        $this->value = $currencyService->substringSymbol($this->rawValue, $this->currency);
         // echo "----" . $this->currency . " " . $this->value . "----";
     }
 
     public function getComputedValue() {
-        return $this->value . $this->currencyService->getSymbol($this->currency);
+        return $this->value . $currencyService->getSymbol($this->currency);
     }
 }
